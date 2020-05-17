@@ -1,5 +1,6 @@
 ﻿using Chat.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace Chat.Services.User
 
         public async Task<Models.User> Create(Models.User user)
         {
+            user.Password = Security.HashPassword(user.Password);
             var createdUser = await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return createdUser.Entity;
@@ -29,6 +31,11 @@ namespace Chat.Services.User
             var removedUser = _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return removedUser.Entity;
+        }
+
+        public async Task<Models.User> GetByEmail(string email)
+        {
+            return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
         public async Task<Models.User> GetById(long id)

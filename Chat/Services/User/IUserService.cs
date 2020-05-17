@@ -11,6 +11,7 @@ namespace Chat.Services
     {
         List<Models.User> GetUsers();
         Task<Models.User> GetById(long id);
+        Task<Models.User> GetByEmail(string email);
         Task<Models.User> Create(Models.User user);
         Task<Models.User> Update(Models.User user);
         Task<Models.User> Delete(Models.User user);
