@@ -1,4 +1,5 @@
 ﻿using Chat.Data;
+using Chat.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Chat.Services.User
+namespace Chat.Services
 {
     public class UserService : IUserService
     {
@@ -18,39 +19,40 @@ namespace Chat.Services.User
             _context = context;
         }
 
-        public async Task<Models.User> Create(Models.User user)
+        public async Task<User> Create(User user)
         {
             user.Password = Security.HashPassword(user.Password);
+            user.CreationDate = DateTime.UtcNow;
             var createdUser = await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
             return createdUser.Entity;
         }
 
-        public async Task<Models.User> Delete(Models.User user)
+        public async Task< User> Delete( User user)
         {
             var removedUser = _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return removedUser.Entity;
         }
 
-        public async Task<Models.User> GetByEmail(string email)
+        public async Task< User> GetByEmail(string email)
         {
             return await _context.Users.Where(u => u.Email == email).FirstOrDefaultAsync();
         }
 
-        public async Task<Models.User> GetById(long id)
+        public async Task< User> GetById(long id)
         {
             return await _context.Users.FindAsync(id);
         }
 
-        public List<Models.User> GetUsers()
+        public List< User> GetUsers()
         {
             return _context.Users.ToList();
         }
 
-        public async Task<Models.User> Update(Models.User user)
+        public async Task< User> Update( User user)
         {
-            _context.Entry(user).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
             return user;

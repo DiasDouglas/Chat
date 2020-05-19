@@ -18,6 +18,8 @@ namespace Chat.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ChatUser>().HasKey(c => new { c.ChatId, c.UserId });
+
+            modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
         }
 
         public DbSet<User> Users { get; set; }
