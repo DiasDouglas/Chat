@@ -26,6 +26,7 @@ namespace Chat
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IMessageService, MessageService>();
+            services.AddScoped<IChatService, ChatService>();
 
             services.AddControllers();
         }

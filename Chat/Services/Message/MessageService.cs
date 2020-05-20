@@ -18,7 +18,7 @@ namespace Chat.Services
             _context = context;
         }
 
-        public async Task<ActionResult<Message>> Create(Message message)
+        public async Task<Message> Create(Message message)
         {
             message.Date = DateTime.UtcNow;
 
@@ -28,26 +28,26 @@ namespace Chat.Services
             return createdMessage.Entity;
         }
 
-        public ActionResult<Message> Delete(Message message)
+        public Message Delete(Message message)
         {
             var messageDeleted = _context.Remove(message);
             _context.SaveChanges();
             return messageDeleted.Entity;
         }
 
-        public async Task<ActionResult<List<Message>>> GetByChatId(long chatId)
+        public async Task<List<Message>> GetByChatId(long chatId)
         {
             return await _context.Messages.Where(m => m.ChatId == chatId).ToListAsync();
         }
 
-        public async Task<ActionResult<List<Message>>> GetByChatIdAndUserId(long chatId, long userId)
+        public async Task<List<Message>> GetByChatIdAndUserId(long chatId, long userId)
         {
             return await _context.Messages
                 .Where(m => m.ChatId == chatId && m.UserId == userId)
                 .ToListAsync();
         }
 
-        public async Task<ActionResult<List<Message>>> GetByChatIdAndUserIdInDateRange(long chatId, long userId, DateTime startDate, DateTime endDate)
+        public async Task<List<Message>> GetByChatIdAndUserIdInDateRange(long chatId, long userId, DateTime startDate, DateTime endDate)
         {
             startDate = startDate.Date;
             endDate = endDate.Date.AddDays(1);
@@ -58,7 +58,7 @@ namespace Chat.Services
                 .ToListAsync();
         }
 
-        public async Task<ActionResult<List<Message>>> GetByChatIdInDateRange(long chatId, DateTime startDate, DateTime endDate)
+        public async Task<List<Message>> GetByChatIdInDateRange(long chatId, DateTime startDate, DateTime endDate)
         {
             startDate = startDate.Date;
             endDate = endDate.Date.AddDays(1);
@@ -68,17 +68,17 @@ namespace Chat.Services
                 .ToListAsync();
         }
 
-        public async Task<ActionResult<Message>> GetById(long id)
+        public async Task<Message> GetById(long id)
         {
             return await _context.Messages.FindAsync(id);
         }
 
-        public async Task<ActionResult<List<Message>>> GetByUserId(long userId)
+        public async Task<List<Message>> GetByUserId(long userId)
         {
             return await _context.Messages.Where(m => m.UserId == userId).ToListAsync();
         }
 
-        public async Task<ActionResult<List<Message>>> GetByUserIdInDateRange(long userId, DateTime startDate, DateTime endDate)
+        public async Task<List<Message>> GetByUserIdInDateRange(long userId, DateTime startDate, DateTime endDate)
         {
             startDate = startDate.Date;
             endDate = endDate.Date.AddDays(1);
@@ -88,7 +88,7 @@ namespace Chat.Services
                 .ToListAsync();
         }
 
-        public async Task<ActionResult<Message>> Update(Message message)
+        public async Task<Message> Update(Message message)
         {
             _context.Entry(message).State = EntityState.Modified;
             await _context.SaveChangesAsync();

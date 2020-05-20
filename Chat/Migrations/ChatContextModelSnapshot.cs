@@ -133,7 +133,7 @@ namespace Chat.Migrations
 
             modelBuilder.Entity("Chat.Models.Message", b =>
                 {
-                    b.HasOne("Chat.Models.Chat", null)
+                    b.HasOne("Chat.Models.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)

@@ -20,6 +20,8 @@ namespace Chat.Data
             modelBuilder.Entity<ChatUser>().HasKey(c => new { c.ChatId, c.UserId });
 
             modelBuilder.Entity<User>().HasIndex(u => u.Email).IsUnique();
+
+            modelBuilder.Entity<Message>().HasOne(m => m.Chat).WithMany(c => c.Messages);
         }
 
         public DbSet<User> Users { get; set; }
