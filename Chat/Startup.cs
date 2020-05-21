@@ -1,7 +1,9 @@
 using Chat.Data;
+using Chat.Models;
 using Chat.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,14 @@ namespace Chat
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<IChatService, ChatService>();
 
+            services.AddControllers()
+                .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+            services.AddIdentity<User, IdentityRole>()
+                                                      .AddEntityFrameworkStores<ChatContext>()
+                                                      .AddDefaultTokenProviders();
+
             services.AddControllers();
         }
 
@@ -48,6 +58,11 @@ namespace Chat
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute().RequireAuthorization();
             });
         }
     }

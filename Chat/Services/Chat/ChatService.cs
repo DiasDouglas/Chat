@@ -26,7 +26,12 @@ namespace Chat.Services
 
         public async Task<Models.Chat> GetById(long id)
         {
-            return await _context.Chats.FindAsync(id);
+            return await _context.Chats
+                .Include("Messages")
+                .Include("ChatUsers")
+                .Include("ChatUsers.User")
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<Models.Chat>> GetByUserId(long userId)
